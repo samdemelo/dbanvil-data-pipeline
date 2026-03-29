@@ -1,9 +1,9 @@
-from extract.supabase import get_connection
+from connection.data_sources import get_connection_dbanvil_supabase
 
 def main():
     print("Pipeline starting...")
 
-    conn = get_connection()
+    conn = get_connection_dbanvil_supabase()
     print("Supabase connection successful.")
 
     conn.close()
