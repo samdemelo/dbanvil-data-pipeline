@@ -8,6 +8,7 @@ def get_users(connection):
         u.email_confirmed_at,
         u.created_at,
         u.last_sign_in_at,
+        u.email,
         p.marketing_opt_in
     FROM auth.users u
     INNER JOIN profiles p ON p.id = u.id;
