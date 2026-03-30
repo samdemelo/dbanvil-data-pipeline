@@ -11,7 +11,8 @@ def get_users(connection):
         u.email,
         p.marketing_opt_in
     FROM auth.users u
-    INNER JOIN profiles p ON p.id = u.id;
+    INNER JOIN profiles p ON p.id = u.id
+    ORDER BY last_sign_in_at DESC;
     """
 
     df = pd.read_sql_query(query, connection)
@@ -20,7 +21,7 @@ def get_users(connection):
 def get_diagram_summary(connection):
     query = """
         SELECT id, owner_id, name, updated_at FROM diagrams d
-        ORDER BY id;
+        ORDER BY updated_at DESC;
     """
 
     df = pd.read_sql_query(query, connection)
