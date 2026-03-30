@@ -24,8 +24,8 @@ def main():
     index_df = get_index_dataset(diagram_data)
     column_df = get_column_dataset(diagram_data)
 
- #   print(users_df.head())
- #   print(diagrams_df.head())
+    print(users_df.head())
+    print(diagrams_df.head())
     print(diagrams_from_json_df.head())
     print(table_df.head())
     print(index_df.head())
