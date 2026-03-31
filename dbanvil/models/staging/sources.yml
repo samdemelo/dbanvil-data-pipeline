@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw
+    database: DBANVIL
+    schema: RAW
+    tables:
+      - name: users
+      - name: diagram
+      - name: diagram_table
+      - name: diagram_index
+      - name: diagram_column
