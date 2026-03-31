@@ -55,6 +55,12 @@ models:
           from_columns: ['diagram_id', 'parent_table_id']
           to_model: ref('stg_diagram_table')
           to_columns: ['diagram_id', 'table_id']
+    - dbt_utils.unique_combination_of_columns:
+        arguments:
+          combination_of_columns:
+            - diagram_id
+            - parent_table_id
+            - column_id
     columns:
       - name: diagram_id
         data_tests:
@@ -68,6 +74,3 @@ models:
       - name: parent_table_id
         data_tests:
           - not_null
-          - relationships:
-              to: ref('stg_diagram_table')
-              field: table_id
