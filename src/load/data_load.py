@@ -20,6 +20,14 @@ def _append_dataframe(df: pd.DataFrame, engine, table_name: str, schema: str = R
         method="multi",
     )
 
+def _cast_columns_to_string(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    result = df.copy()
+
+    for col in columns:
+        if col in result.columns:
+            result[col] = result[col].apply(lambda x: str(x) if x is not None else None)
+
+    return result
 
 def load_users(users_df: pd.DataFrame, engine) -> None:
     """
@@ -45,6 +53,8 @@ def load_users(users_df: pd.DataFrame, engine) -> None:
             "email_domain",
         ]
     ].copy()
+
+    target_df = _cast_columns_to_string(target_df, ["id"])
 
     _truncate_table(engine, "USERS")
     _append_dataframe(target_df, engine, "USERS")
@@ -89,6 +99,8 @@ def load_diagram(diagrams_df: pd.DataFrame, diagrams_from_json_df: pd.DataFrame,
         ]
     ]
 
+    target_df = _cast_columns_to_string(target_df, ["id", "owner_id"])
+
     _truncate_table(engine, "DIAGRAM")
     _append_dataframe(target_df, engine, "DIAGRAM")
 
@@ -115,6 +127,8 @@ def load_diagram_table(table_df: pd.DataFrame, engine) -> None:
             "referenced_table_count",
         ]
     ].copy()
+
+    target_df = _cast_columns_to_string(target_df, ["diagram_id", "table_id"])
 
     _truncate_table(engine, "DIAGRAM_TABLE")
     _append_dataframe(target_df, engine, "DIAGRAM_TABLE")
@@ -151,6 +165,8 @@ def load_diagram_index(index_df: pd.DataFrame, engine) -> None:
         ]
     ]
 
+    target_df = _cast_columns_to_string(target_df, ["diagram_id", "parent_table_id", "index_id"])
+
     _truncate_table(engine, "DIAGRAM_INDEX")
     _append_dataframe(target_df, engine, "DIAGRAM_INDEX")
 
@@ -179,6 +195,8 @@ def load_diagram_column(column_df: pd.DataFrame, engine) -> None:
             "is_computed",
         ]
     ].copy()
+
+    target_df = _cast_columns_to_string(target_df, ["diagram_id", "parent_table_id", "column_id"])
 
     _truncate_table(engine, "DIAGRAM_COLUMN")
     _append_dataframe(target_df, engine, "DIAGRAM_COLUMN")
