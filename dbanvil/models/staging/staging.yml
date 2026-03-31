@@ -49,6 +49,12 @@ models:
           - not_null
 
   - name: stg_diagram_column
+    data_tests:
+    - relationships_compound:
+        arguments:
+          from_columns: ['diagram_id', 'parent_table_id']
+          to_model: ref('stg_diagram_table')
+          to_columns: ['diagram_id', 'table_id']
     columns:
       - name: diagram_id
         data_tests:
@@ -62,3 +68,6 @@ models:
       - name: parent_table_id
         data_tests:
           - not_null
+          - relationships:
+              to: ref('stg_diagram_table')
+              field: table_id
