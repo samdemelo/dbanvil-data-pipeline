@@ -1,0 +1,97 @@
+version: 2
+
+models:
+  - name: core_users
+    columns:
+      - name: user_id
+        data_tests:
+          - not_null
+          - unique
+
+  - name: core_diagram
+    columns:
+      - name: diagram_id
+        data_tests:
+          - not_null
+          - unique
+      - name: owner_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('core_users')
+                field: user_id
+
+  - name: core_diagram_table
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - diagram_id
+              - table_id
+    columns:
+      - name: diagram_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('core_diagram')
+                field: diagram_id
+      - name: table_id
+        data_tests:
+          - not_null
+
+  - name: core_diagram_index
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - diagram_id
+              - index_id
+      - relationships_compound:
+          arguments:
+            from_columns: ['diagram_id', 'parent_table_id']
+            to_model: ref('core_diagram_table')
+            to_columns: ['diagram_id', 'table_id']
+    columns:
+      - name: diagram_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('core_diagram')
+                field: diagram_id
+      - name: index_id
+        data_tests:
+          - not_null
+      - name: parent_table_id
+        data_tests:
+          - not_null
+
+  - name: core_diagram_column
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - diagram_id
+              - parent_table_id
+              - column_id
+      - relationships_compound:
+          arguments:
+            from_columns: ['diagram_id', 'parent_table_id']
+            to_model: ref('core_diagram_table')
+            to_columns: ['diagram_id', 'table_id']
+    columns:
+      - name: diagram_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('core_diagram')
+                field: diagram_id
+      - name: column_id
+        data_tests:
+          - not_null
+      - name: parent_table_id
+        data_tests:
+          - not_null
