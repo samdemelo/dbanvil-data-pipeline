@@ -38,6 +38,17 @@ def _add_load_timestamp(df: pd.DataFrame, load_timestamp: pd.Timestamp) -> pd.Da
     return result
 
 
+# Added by ChatGPT
+def _ensure_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    result = df.copy()
+
+    for col in columns:
+        if col not in result.columns:
+            result[col] = None
+
+    return result
+
+
 def load_users(users_df: pd.DataFrame, engine, load_timestamp: pd.Timestamp) -> None:
     """
     Destination: RAW.USERS
@@ -67,8 +78,13 @@ def load_diagram(diagrams_df: pd.DataFrame, diagrams_from_json_df: pd.DataFrame,
     Destination: RAW.DIAGRAM
     """
 
-    target_df = diagrams_df.merge(
+    diagrams_from_json_df = _ensure_columns(
         diagrams_from_json_df,
+        ["id", "db_system", "legend_enabled"]
+    )
+
+    target_df = diagrams_df.merge(
+        diagrams_from_json_df[["id", "db_system", "legend_enabled"]],
         how="left",
         on="id",
         validate="one_to_one",
@@ -103,6 +119,18 @@ def load_diagram_table(table_df: pd.DataFrame, engine, load_timestamp: pd.Timest
     Destination: RAW.DIAGRAM_TABLE
     """
 
+    table_df = _ensure_columns(
+        table_df,
+        [
+            "diagram_id",
+            "table_id",
+            "table_name",
+            "table_schema",
+            "referencing_table_count",
+            "referenced_table_count",
+        ]
+    )
+
     target_df = table_df[
         [
             "diagram_id",
@@ -125,6 +153,19 @@ def load_diagram_index(index_df: pd.DataFrame, engine, load_timestamp: pd.Timest
     """
     Destination: RAW.DIAGRAM_INDEX
     """
+
+    index_df = _ensure_columns(
+        index_df,
+        [
+            "diagram_id",
+            "parent_table_id",
+            "index_id",
+            "index_name",
+            "uniqueness",
+            "index_type",
+            "number_of_columns",
+        ]
+    )
 
     target_df = index_df.rename(
         columns={
@@ -155,6 +196,19 @@ def load_diagram_column(column_df: pd.DataFrame, engine, load_timestamp: pd.Time
     """
     Destination: RAW.DIAGRAM_COLUMN
     """
+
+    column_df = _ensure_columns(
+        column_df,
+        [
+            "diagram_id",
+            "parent_table_id",
+            "column_id",
+            "column_name",
+            "data_type_name",
+            "has_identity_constraint",
+            "is_computed",
+        ]
+    )
 
     target_df = column_df[
         [

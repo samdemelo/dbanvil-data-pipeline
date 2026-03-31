@@ -17,13 +17,12 @@ from load.data_load import (
     load_diagram_index,
     load_diagram_column,
 )
-
+from load.run_metadata import get_last_pipeline_run_timestamp
 
 def main():
     source_engine = get_dbanvil_supabase_engine()
     target_engine = get_snowflake_engine()
 
-    # Added by ChatGPT
     load_timestamp = pd.Timestamp.utcnow()
 
     users_df = get_users(source_engine)
@@ -31,7 +30,12 @@ def main():
 
     diagrams_df = get_diagram_summary(source_engine)
 
-    last_modified_date = datetime(2025, 1, 1, tzinfo=timezone.utc)
+    # Get the datetime of the last run so we only pull the delta of diagram details
+    last_modified_date = get_last_pipeline_run_timestamp(
+        target_engine,
+        fallback=datetime(2025, 1, 1, tzinfo=timezone.utc),
+    )
+
     diagram_data = get_diagram_data(source_engine, last_modified_date)
 
     diagrams_from_json_df = get_diagram_dataset(diagram_data)
