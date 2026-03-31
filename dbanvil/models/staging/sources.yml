@@ -6,7 +6,45 @@ sources:
     schema: RAW
     tables:
       - name: users
+        columns:
+          - name: id
+            data_tests:
+              - not_null
+              - unique
+
       - name: diagram
+        columns:
+          - name: id
+            data_tests:
+              - not_null
+              - unique
+          - name: owner_id
+            data_tests:
+              - not_null
+
       - name: diagram_table
+        columns:
+          - name: diagram_id
+            data_tests:
+              - not_null
+          - name: table_id
+            data_tests:
+              - not_null
+
       - name: diagram_index
+        columns:
+          - name: diagram_id
+            data_tests:
+              - not_null
+          - name: index_id
+            data_tests:
+              - not_null
+
       - name: diagram_column
+        columns:
+          - name: diagram_id
+            data_tests:
+              - not_null
+          - name: column_id
+            data_tests:
+              - not_null
