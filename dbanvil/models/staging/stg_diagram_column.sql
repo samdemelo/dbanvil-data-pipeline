@@ -5,5 +5,6 @@ select
     trim(column_name) as column_name,
     lower(trim(data_type_name)) as data_type_name,
     has_identity_constraint,
-    is_computed
+    is_computed,
+    load_timestamp
 from {{ source('raw', 'diagram_column') }}

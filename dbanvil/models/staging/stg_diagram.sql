@@ -4,5 +4,6 @@ select
     trim(diagram_name) as diagram_name,
     lower(trim(db_system)) as db_system,
     legend_enabled,
-    updated_at
+    updated_at,
+    load_timestamp
 from {{ source('raw', 'diagram') }}

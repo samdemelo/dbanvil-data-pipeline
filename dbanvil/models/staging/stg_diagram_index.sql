@@ -5,5 +5,6 @@ select
     trim(index_name) as index_name,
     lower(trim(uniqueness)) as uniqueness,
     lower(trim(index_type)) as index_type,
-    column_count
+    column_count,
+    load_timestamp
 from {{ source('raw', 'diagram_index') }}

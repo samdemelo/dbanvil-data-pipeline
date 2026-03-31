@@ -20,6 +20,7 @@ def _append_dataframe(df: pd.DataFrame, engine, table_name: str, schema: str = R
         method="multi",
     )
 
+
 def _cast_columns_to_string(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     result = df.copy()
 
@@ -29,19 +30,19 @@ def _cast_columns_to_string(df: pd.DataFrame, columns: list[str]) -> pd.DataFram
 
     return result
 
-def load_users(users_df: pd.DataFrame, engine) -> None:
+
+# Added by ChatGPT
+def _add_load_timestamp(df: pd.DataFrame, load_timestamp: pd.Timestamp) -> pd.DataFrame:
+    result = df.copy()
+    result["load_timestamp"] = load_timestamp
+    return result
+
+
+def load_users(users_df: pd.DataFrame, engine, load_timestamp: pd.Timestamp) -> None:
     """
     Destination: RAW.USERS
-
-    Expected input columns:
-    - id
-    - confirmation_sent_at
-    - email_confirmed_at
-    - created_at
-    - last_sign_in_at
-    - marketing_opt_in
-    - email_domain
     """
+
     target_df = users_df[
         [
             "id",
@@ -55,26 +56,17 @@ def load_users(users_df: pd.DataFrame, engine) -> None:
     ].copy()
 
     target_df = _cast_columns_to_string(target_df, ["id"])
+    target_df = _add_load_timestamp(target_df, load_timestamp)
 
     _truncate_table(engine, "USERS")
     _append_dataframe(target_df, engine, "USERS")
 
 
-def load_diagram(diagrams_df: pd.DataFrame, diagrams_from_json_df: pd.DataFrame, engine) -> None:
+def load_diagram(diagrams_df: pd.DataFrame, diagrams_from_json_df: pd.DataFrame, engine, load_timestamp: pd.Timestamp) -> None:
     """
     Destination: RAW.DIAGRAM
-
-    diagrams_df columns:
-    - id
-    - owner_id
-    - name
-    - updated_at
-
-    diagrams_from_json_df columns:
-    - id
-    - db_system
-    - legend_enabled
     """
+
     target_df = diagrams_df.merge(
         diagrams_from_json_df,
         how="left",
@@ -100,23 +92,17 @@ def load_diagram(diagrams_df: pd.DataFrame, diagrams_from_json_df: pd.DataFrame,
     ]
 
     target_df = _cast_columns_to_string(target_df, ["id", "owner_id"])
+    target_df = _add_load_timestamp(target_df, load_timestamp)
 
     _truncate_table(engine, "DIAGRAM")
     _append_dataframe(target_df, engine, "DIAGRAM")
 
 
-def load_diagram_table(table_df: pd.DataFrame, engine) -> None:
+def load_diagram_table(table_df: pd.DataFrame, engine, load_timestamp: pd.Timestamp) -> None:
     """
     Destination: RAW.DIAGRAM_TABLE
-
-    Expected input columns:
-    - diagram_id
-    - table_id
-    - table_name
-    - table_schema
-    - referencing_table_count
-    - referenced_table_count
     """
+
     target_df = table_df[
         [
             "diagram_id",
@@ -129,24 +115,17 @@ def load_diagram_table(table_df: pd.DataFrame, engine) -> None:
     ].copy()
 
     target_df = _cast_columns_to_string(target_df, ["diagram_id", "table_id"])
+    target_df = _add_load_timestamp(target_df, load_timestamp)
 
     _truncate_table(engine, "DIAGRAM_TABLE")
     _append_dataframe(target_df, engine, "DIAGRAM_TABLE")
 
 
-def load_diagram_index(index_df: pd.DataFrame, engine) -> None:
+def load_diagram_index(index_df: pd.DataFrame, engine, load_timestamp: pd.Timestamp) -> None:
     """
     Destination: RAW.DIAGRAM_INDEX
-
-    Expected input columns:
-    - diagram_id
-    - parent_table_id
-    - index_id
-    - index_name
-    - uniqueness
-    - index_type
-    - number_of_columns
     """
+
     target_df = index_df.rename(
         columns={
             "number_of_columns": "column_count",
@@ -166,24 +145,17 @@ def load_diagram_index(index_df: pd.DataFrame, engine) -> None:
     ]
 
     target_df = _cast_columns_to_string(target_df, ["diagram_id", "parent_table_id", "index_id"])
+    target_df = _add_load_timestamp(target_df, load_timestamp)
 
     _truncate_table(engine, "DIAGRAM_INDEX")
     _append_dataframe(target_df, engine, "DIAGRAM_INDEX")
 
 
-def load_diagram_column(column_df: pd.DataFrame, engine) -> None:
+def load_diagram_column(column_df: pd.DataFrame, engine, load_timestamp: pd.Timestamp) -> None:
     """
     Destination: RAW.DIAGRAM_COLUMN
-
-    Expected input columns:
-    - diagram_id
-    - parent_table_id
-    - column_id
-    - column_name
-    - data_type_name
-    - has_identity_constraint
-    - is_computed
     """
+
     target_df = column_df[
         [
             "diagram_id",
@@ -197,6 +169,7 @@ def load_diagram_column(column_df: pd.DataFrame, engine) -> None:
     ].copy()
 
     target_df = _cast_columns_to_string(target_df, ["diagram_id", "parent_table_id", "column_id"])
+    target_df = _add_load_timestamp(target_df, load_timestamp)
 
     _truncate_table(engine, "DIAGRAM_COLUMN")
     _append_dataframe(target_df, engine, "DIAGRAM_COLUMN")

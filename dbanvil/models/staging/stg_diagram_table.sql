@@ -4,5 +4,6 @@ select
     trim(table_name) as table_name,
     trim(table_schema) as table_schema,
     referencing_table_count,
-    referenced_table_count
+    referenced_table_count,
+    load_timestamp
 from {{ source('raw', 'diagram_table') }}

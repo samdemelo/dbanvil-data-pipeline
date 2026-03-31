@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import pandas as pd
 
 from connection.data_sources import get_dbanvil_supabase_engine, get_snowflake_engine
 from extract.data_extraction import get_users, get_diagram_summary, get_diagram_data
@@ -22,6 +23,9 @@ def main():
     source_engine = get_dbanvil_supabase_engine()
     target_engine = get_snowflake_engine()
 
+    # Added by ChatGPT
+    load_timestamp = pd.Timestamp.utcnow()
+
     users_df = get_users(source_engine)
     users_df = transform_users(users_df)
 
@@ -35,11 +39,11 @@ def main():
     index_df = get_index_dataset(diagram_data)
     column_df = get_column_dataset(diagram_data)
 
-    load_users(users_df, target_engine)
-    load_diagram(diagrams_df, diagrams_from_json_df, target_engine)
-    load_diagram_table(table_df, target_engine)
-    load_diagram_index(index_df, target_engine)
-    load_diagram_column(column_df, target_engine)
+    load_users(users_df, target_engine, load_timestamp)
+    load_diagram(diagrams_df, diagrams_from_json_df, target_engine, load_timestamp)
+    load_diagram_table(table_df, target_engine, load_timestamp)
+    load_diagram_index(index_df, target_engine, load_timestamp)
+    load_diagram_column(column_df, target_engine, load_timestamp)
 
 #Python pads the name of the file with double underscores when the file is run directly via python.exe, otherwise __name__ (a built-in variable) = "main", e.g. if it's imported.
 if __name__ == "__main__":

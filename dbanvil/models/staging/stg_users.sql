@@ -40,6 +40,7 @@ select
         )
         then null
         else lower(trim(email_domain))
-    end as email_domain
+    end as email_domain,
+    load_timestamp
 
 from {{ source('raw', 'users') }}
