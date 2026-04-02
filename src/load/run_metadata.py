@@ -11,7 +11,7 @@ def get_last_pipeline_run_timestamp(
 
     query = text("""
         select max(load_timestamp) as last_run_timestamp
-        from RAW.DIAGRAM
+        from CLEAN_CORE.CORE_DIAGRAM
     """)
 
     with engine.connect() as connection:
