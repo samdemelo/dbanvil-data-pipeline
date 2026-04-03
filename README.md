@@ -1,16 +1,7 @@
 ## Analytics Dashboard (Power BI)
 
-This repository includes a sample analytics dashboard built in Power BI using data from the DBAnvil data modeling platform.
+This repository is for a diagram analytics data pipeline from DBAnvil’s Supabase environment to a Snowflake data warehouse, using python-based ELT, dbt transformations and CI/CD, orchestrated with Airflow running on WSL2. See the DBAnvil data pipeline repository on my github profile. 
 
-The dashboard is backed by a full data pipeline:
-
-- Source: Supabase/Postgres (OLTP)
-- Extraction: Python ELT
-- Storage: Snowflake (data warehouse)
-- Transformation: dbt
-- Orchestration: Airflow
-- Visualization: Power BI
-
-A static export of the dashboard is included below:
+It includes a sample analytics dashboard built in Power BI, a PDF copy of which is provided below.
 
 ![Power BI Dashboard sample](/dbanvil_analytics.pdf)
