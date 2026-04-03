@@ -115,3 +115,19 @@ Runtime Error
 [0m15:14:42.306220 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000024B3E1CA650>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000024B3E0F6B10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000024B3E0CBDF0>]}
 [0m15:14:42.306978 [debug] [MainThread]: Flushing usage events
 [0m15:14:43.120925 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m22:41:05.532956 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7afa78a6e660>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7afa787fc8f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7afa78a6f380>]}
+
+
+============================== 22:41:05.540641 | a9ee2d41-7239-44c9-9048-64893c9eab52 ==============================
+[0m22:41:05.540641 [info ] [MainThread]: Running with dbt=1.11.7
+[0m22:41:05.543135 [debug] [MainThread]: running dbt with arguments {'indirect_selection': 'eager', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'use_experimental_parser': 'False', 'send_anonymous_usage_stats': 'True', 'warn_error': 'None', 'fail_fast': 'False', 'cache_selected_only': 'False', 'introspect': 'True', 'log_path': 'logs', 'version_check': 'True', 'write_json': 'True', 'log_format': 'default', 'debug': 'False', 'log_cache_events': 'False', 'target_path': 'None', 'use_colors': 'True', 'static_parser': 'True', 'invocation_command': 'dbt run --project-dir /mnt/c/Users/Sam/Documents/dbanvil-data-pipeline/dbanvil-data-pipeline --profiles-dir /mnt/c/Users/Sam/.dbt --select staging', 'quiet': 'False', 'profiles_dir': '/mnt/c/Users/Sam/.dbt', 'no_print': 'None', 'partial_parse': 'True', 'printer_width': '80', 'empty': 'False'}
+[0m22:41:05.545713 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /mnt/c/Users/Sam/Documents/dbanvil-data-pipeline/dbanvil-data-pipeline/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m22:41:05.548798 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.20055638, "process_in_blocks": "8", "process_kernel_time": 0.38615, "process_mem_max_rss": "102588", "process_out_blocks": "0", "process_user_time": 3.255951}
+[0m22:41:05.550694 [debug] [MainThread]: Command `dbt run` failed at 22:41:05.550430 after 0.20 seconds
+[0m22:41:05.552721 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7afa78a6e660>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7afa7c5b1a90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7afa7b16aab0>]}
+[0m22:41:05.555060 [debug] [MainThread]: Flushing usage events
+[0m22:41:05.926800 [debug] [MainThread]: An error was encountered while trying to flush usage events
